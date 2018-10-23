@@ -21,9 +21,37 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp',(err,client)=>{
     //     console.log(err);
     // });
 
-    db.collection('Users').find({name:"Ria",location:"Ames,Iowa"}).toArray().then((docs)=>{
-        console.log(JSON.stringify(docs,undefined,2));
+    // db.collection('Users').find({name:"Ria",location:"Ames,Iowa"}).toArray().then((docs)=>{
+    //     console.log(JSON.stringify(docs,undefined,2));
+    // }).catch((err)=>{
+    //     console.log(err);
+    // });
+    //delete many
+    // db.collection('Todos').deleteMany({text:"Eat Lunch"}).then((result)=>{
+    //     //     console.log(result);
+    //     // }).catch((err)=>{
+    //     //     console.log(err);
+    //     // });
+
+    // db.collection('Todos').deleteOne({text:"Go to office"}).then((result)=>{
+    //     console.log(result);
+    // }).catch((err)=>{
+    //     console.log(err);
+    // });
+
+    // db.collection('Todos').findOneAndDelete({completed:true}).then((result)=>{
+    //    console.log(result) ;
+    // }).catch((err)=>{
+    //     console.log(err);
+    // });
+    // db.collection('Users').deleteMany({name:"Ria"}).then((result)=>{
+    //   console.log(result)  ;
+    // }).catch((err)=>{
+    //     console.log(err);
+    // });
+    db.collection('Users').findOneAndDelete({_id: new ObjectId("5bcf457b55427a3d93125bae")}).then((result)=>{
+        console.log(JSON.stringify(result,undefined,2));
     }).catch((err)=>{
         console.log(err);
-    });
+    })
 });
