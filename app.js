@@ -7,7 +7,9 @@ const todoRouter = require('./routes/todos');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/todos', todoRouter);
+app.use('/', todoRouter);
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
