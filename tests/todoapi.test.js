@@ -6,7 +6,7 @@ const {ObjectId} = require('mongodb');
 
 const {app} = require('../app');
 const {ToDo} = require('../models/todo');
-
+const {User} = require('../models/user');
 const todos = [{
     _id: new ObjectId(),
     text: 'First test todo'
@@ -162,11 +162,8 @@ describe('#Todo apis', () => {
 
         it('should clear completedAt when todo is not completed',(done)=>{
             let id = todos[1]._id.valueOf();
-            let text = 'blablabla';
-            request(app).put(`/todos/${id}`).send({completed:false,text}).end((err,res)=>{
+            request(app).put(`/todos/${id}`).send({completed:false}).end((err,res)=>{
                 expect(res.statusCode).to.equal(200);
-                expect(res.body.todo).to.have.property('text');
-                expect(res.body.todo.text).to.eql(`${text}`);
                 expect(res.body.todo).to.have.property('completed',false);
                 expect(res.body.todo).to.have.property('completedAt');
                 expect(res.body.todo.completedAt).to.be.a('null');

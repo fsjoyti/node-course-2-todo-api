@@ -2,12 +2,17 @@ const express = require('express');
 const _ = require('lodash');
 const {mongoose} = require('../db/mongoose');
 const {ToDo} = require('../models/todo');
-let router = express.Router();
+
+
+
+
+const router = express.Router();
 const {ObjectId} = require('mongodb');
 
 
 /* GET home page. */
 router.get('/todos', function (req, res, next) {
+    console.log('modified');
     //res.render('index', { title: 'Express' });
     ToDo.find().then((todos)=>{
       res.send({todos});
@@ -82,6 +87,12 @@ router.put('/todos/:id',(req,res,next)=>{
     });
 
 });
+
+router.get('/users',(req,res,next)=>{
+    res.send({message:"In progress"});
+});
+
+
 
 
 module.exports = router;

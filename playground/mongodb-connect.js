@@ -18,16 +18,16 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp',(err,client)=>
     //
     //
     // });
-    db.collection('Users').insertOne({
-        name:'Ria',
-        age:24,
-        location:'Vancouver,Washington'
-    },(err,result)=>{
-        if(err){
-            console.log('failed to insert user in database',err);
-        }
-        console.log(JSON.stringify(result.ops,undefined,2));
-
-    });
-    client.close();
+    // db.collection('Users').insertOne({
+    //     name:'Ria',
+    //     age:24,
+    //     location:'Vancouver,Washington'
+    // },(err,result)=>{
+    //     if(err){
+    //         console.log('failed to insert user in database',err);
+    //     }
+    //     console.log(JSON.stringify(result.ops,undefined,2));
+    //
+    // });
+    // client.close();
 });
