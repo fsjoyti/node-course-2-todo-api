@@ -12,7 +12,6 @@ const {todos,populateTodos,users,populateUsers} = require('./seed/seed');
 beforeEach(populateUsers);
 beforeEach(populateTodos);
 describe('#Todo apis', () => {
-    console.log('here');
     describe('POST /todos', () => {
         it('should save the todo ', (done) => {
             let text = 'Test todo text';
@@ -261,6 +260,30 @@ describe('#Todo apis', () => {
         });
 
         });
+
+    describe('DELETE /users/me/token',()=>{
+        it('should remove token when logout',(done)=>{
+            chai.request(app).delete('/users/me/token').set('x-auth',users[0].tokens[0].token).end((err,res)=>{
+                if(err){
+                    done(err);
+                }
+                expect(res.status).to.equal(200);
+                User.findOne({_id:users[0]._id}).then((user)=>{
+                    expect(user).to.exist;
+                    expect(user).to.have.property('tokens');
+                    expect(user.tokens.length).to.equal(0);
+                    done();
+                }).catch((err)=>done(err));
+
+
+            });
+
+        });
+
+    });
+
+
+
 
 
 });
