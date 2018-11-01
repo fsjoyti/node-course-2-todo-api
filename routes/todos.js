@@ -1,20 +1,15 @@
 const express = require('express');
 const _ = require('lodash');
+const {authenticate} = require('../middlewares/authenticate');
 const {mongoose} = require('../db/mongoose');
 const {ToDo} = require('../models/todo');
-
-
-
-
 const router = express.Router();
 const {ObjectId} = require('mongodb');
 
 
 /* GET home page. */
-router.get('/todos', function (req, res, next) {
-    console.log('modified');
-    //res.render('index', { title: 'Express' });
-    ToDo.find().then((todos)=>{
+router.get('/todos',authenticate, function (req, res, next) {
+    ToDo.find({_creator: req.user._id}).then((todos)=>{
       res.send({todos});
     }).catch((err)=>{
         res.status(400).send(err);
@@ -22,9 +17,10 @@ router.get('/todos', function (req, res, next) {
     });
 
 });
-router.post('/todos', function (req, res, next) {
+router.post('/todos',authenticate, function (req, res, next) {
     let todo = new ToDo({
-        text: req.body.text
+        text: req.body.text,
+        _creator:req.user._id
     });
     todo.save().then((doc) => {
         res.send(doc);
@@ -34,9 +30,9 @@ router.post('/todos', function (req, res, next) {
     });
 });
 
-router.get('/todos/:id', (req,res,next)=>{
+router.get('/todos/:id',authenticate, (req,res,next)=>{
     let id = req.params.id;
-    ToDo.findById(id).then((todo)=>{
+    ToDo.findOne({_id:id,_creator:req.user._id}).then((todo)=>{
         if(!todo){
             return res.status(404).send();
         }
@@ -48,9 +44,9 @@ router.get('/todos/:id', (req,res,next)=>{
 
 });
 
-router.delete('/todos/:id',(req,res,next)=>{
+router.delete('/todos/:id',authenticate,(req,res,next)=>{
     let id = req.params.id;
-    ToDo.findOneAndDelete({_id:id}).then((todo)=>{
+    ToDo.findOneAndDelete({_id:id,_creator:req.user._id}).then((todo)=>{
         if(!todo){
             return res.status(404).send();
         }
@@ -59,12 +55,13 @@ router.delete('/todos/:id',(req,res,next)=>{
         if(!ObjectId.isValid(id)){
             return res.status(404).send();
         }
+        console.log(err);
         res.status(400).send();
     });
 
 });
 
-router.put('/todos/:id',(req,res,next)=>{
+router.put('/todos/:id',authenticate,(req,res,next)=>{
     let id = req.params.id;
     let body = _.pick(req.body,['text','completed']);
     if(!ObjectId.isValid(id)){
@@ -77,7 +74,7 @@ router.put('/todos/:id',(req,res,next)=>{
         body.completed = false;
         body.completedAt = null;
     }
-    ToDo.findOneAndUpdate({_id:id},{$set:body},{new:true}).then((todo)=>{
+    ToDo.findOneAndUpdate({_id:id,_creator:req.user._id},{$set:body},{new:true}).then((todo)=>{
         if(!todo){
             return res.status(404).send();
         }
@@ -88,9 +85,7 @@ router.put('/todos/:id',(req,res,next)=>{
 
 });
 
-router.get('/users',(req,res,next)=>{
-    res.send({message:"In progress"});
-});
+;
 
 
 
